@@ -34,5 +34,3 @@ A professional feedback collection system for AAICLAS Cargo Agents with Flask ba
 - **Frontend:** Bootstrap 5, HTML/CSS/JS
 - **Database:** Google Sheets API
 - **Deployment:** Render / Heroku
-
-## 📁 Project Structure
