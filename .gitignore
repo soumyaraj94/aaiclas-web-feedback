@@ -1,0 +1,4 @@
+# Create .gitignore to exclude sensitive files
+.env
+aaiclas-web-feedback-d403f143c3d2.json
+Folder Structure.txt

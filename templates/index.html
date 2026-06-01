@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>AAICLAS Cargo Agents | Feedback Form</title>
+    <!-- Bootstrap 5 CSS + Icons -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body class="bg-light">
+    <div class="container py-4 py-md-5">
+        <div class="row justify-content-center">
+            <div class="col-12 col-md-10 col-lg-8">
+                <!-- Branding Header -->
+                <div class="text-center mb-4">
+                    <div class="aaiclas-logo mb-3">
+                        <i class="bi bi-airplane-fill display-1 text-primary"></i>
+                    </div>
+                    <h1 class="display-5 fw-bold text-primary">AAICLAS</h1>
+                    <p class="lead text-secondary">Cargo Agents Feedback Portal</p>
+                    <div class="border-bottom border-primary w-25 mx-auto my-3"></div>
+                    <p class="text-muted">Your feedback helps us serve you better</p>
+                </div>
+
+                <!-- Feedback Form Card -->
+                <div class="card shadow-lg border-0 rounded-4">
+                    <div class="card-header bg-white border-0 pt-4 pb-0">
+                        <h3 class="card-title text-center text-dark">
+                            <i class="bi bi-chat-dots-fill text-primary me-2"></i>Share Your Experience
+                        </h3>
+                    </div>
+                    <div class="card-body p-4 p-md-5">
+                        <!-- Alert Container -->
+                        <div id="alertContainer"></div>
+
+                        <form id="feedbackForm">
+                            <!-- Agent Name -->
+                            <div class="mb-3">
+                                <label for="agent_name" class="form-label fw-semibold">
+                                    Agent Name <span class="text-danger">*</span>
+                                </label>
+                                <input type="text" class="form-control form-control-lg" id="agent_name" name="agent_name" placeholder="Enter your full name">
+                                <div class="invalid-feedback" id="agent_name_error"></div>
+                            </div>
+
+                            <!-- Company Name -->
+                            <div class="mb-3">
+                                <label for="company_name" class="form-label fw-semibold">
+                                    Company Name <span class="text-danger">*</span>
+                                </label>
+                                <input type="text" class="form-control form-control-lg" id="company_name" name="company_name" placeholder="Your cargo agency name">
+                                <div class="invalid-feedback" id="company_name_error"></div>
+                            </div>
+
+                            <!-- Mobile Number -->
+                            <div class="mb-3">
+                                <label for="mobile_number" class="form-label fw-semibold">
+                                    Mobile Number <span class="text-danger">*</span>
+                                </label>
+                                <input type="tel" class="form-control form-control-lg" id="mobile_number" name="mobile_number" placeholder="10-digit mobile number" maxlength="10">
+                                <div class="invalid-feedback" id="mobile_number_error"></div>
+                            </div>
+
+                            <!-- Email Address -->
+                            <div class="mb-3">
+                                <label for="email" class="form-label fw-semibold">
+                                    Email Address <span class="text-danger">*</span>
+                                </label>
+                                <input type="email" class="form-control form-control-lg" id="email" name="email" placeholder="you@example.com">
+                                <div class="invalid-feedback" id="email_error"></div>
+                            </div>
+
+                            <!-- Service Rating (1-5 Stars) -->
+                            <div class="mb-3">
+                                <label class="form-label fw-semibold">
+                                    Service Rating <span class="text-danger">*</span>
+                                </label>
+                                <div class="rating-stars">
+                                    <div class="btn-group btn-group-lg w-100" role="group">
+                                        <input type="radio" class="btn-check" name="service_rating" id="rating1" value="1" autocomplete="off">
+                                        <label class="btn btn-outline-warning" for="rating1">1 ★</label>
+                                        
+                                        <input type="radio" class="btn-check" name="service_rating" id="rating2" value="2" autocomplete="off">
+                                        <label class="btn btn-outline-warning" for="rating2">2 ★</label>
+                                        
+                                        <input type="radio" class="btn-check" name="service_rating" id="rating3" value="3" autocomplete="off">
+                                        <label class="btn btn-outline-warning" for="rating3">3 ★</label>
+                                        
+                                        <input type="radio" class="btn-check" name="service_rating" id="rating4" value="4" autocomplete="off">
+                                        <label class="btn btn-outline-warning" for="rating4">4 ★</label>
+                                        
+                                        <input type="radio" class="btn-check" name="service_rating" id="rating5" value="5" autocomplete="off">
+                                        <label class="btn btn-outline-warning" for="rating5">5 ★</label>
+                                    </div>
+                                </div>
+                                <div class="invalid-feedback" id="service_rating_error"></div>
+                            </div>
+
+                            <!-- Your Feedback -->
+                            <div class="mb-3">
+                                <label for="feedback" class="form-label fw-semibold">
+                                    Your Feedback <span class="text-danger">*</span>
+                                </label>
+                                <textarea class="form-control" id="feedback" name="feedback" rows="4" placeholder="Please share your experience, suggestions, or concerns..."></textarea>
+                                <div class="invalid-feedback" id="feedback_error"></div>
+                            </div>
+
+                            <!-- Remarks (Optional) -->
+                            <div class="mb-4">
+                                <label for="remarks" class="form-label fw-semibold">Remarks (Optional)</label>
+                                <textarea class="form-control" id="remarks" name="remarks" rows="2" placeholder="Any additional comments..."></textarea>
+                            </div>
+
+                            <!-- Buttons -->
+                            <div class="d-flex flex-column flex-sm-row gap-3">
+                                <button type="submit" class="btn btn-primary btn-lg flex-grow-1">
+                                    <i class="bi bi-send-fill me-2"></i>Submit Feedback
+                                </button>
+                                <button type="button" id="clearBtn" class="btn btn-outline-secondary btn-lg flex-grow-1">
+                                    <i class="bi bi-eraser-fill me-2"></i>Clear
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="card-footer bg-white border-0 text-center pb-4">
+                        <small class="text-muted">Designed & Developed by Mr. Soumya Raj Ghosh</small>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap JS Bundle -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <script>
+        const form = document.getElementById('feedbackForm');
+        const alertContainer = document.getElementById('alertContainer');
+        
+        // Clear all validation styles
+        function clearValidation() {
+            document.querySelectorAll('.is-invalid').forEach(el => {
+                el.classList.remove('is-invalid');
+            });
+            document.querySelectorAll('.invalid-feedback').forEach(el => {
+                el.textContent = '';
+            });
+        }
+        
+        // Show error messages
+        function showErrors(errors) {
+            clearValidation();
+            for (const [field, message] of Object.entries(errors)) {
+                const input = document.getElementById(field);
+                const errorDiv = document.getElementById(`${field}_error`);
+                if (input && errorDiv) {
+                    input.classList.add('is-invalid');
+                    errorDiv.textContent = message;
+                } else if (field === 'server') {
+                    showAlert(message, 'danger');
+                }
+            }
+        }
+        
+        // Show alert message
+        function showAlert(message, type = 'success') {
+            const alertDiv = document.createElement('div');
+            alertDiv.className = `alert alert-${type} alert-dismissible fade show`;
+            alertDiv.role = 'alert';
+            alertDiv.innerHTML = `
+                <i class="bi ${type === 'success' ? 'bi-check-circle-fill' : 'bi-exclamation-triangle-fill'} me-2"></i>
+                ${message}
+                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            `;
+            alertContainer.innerHTML = '';
+            alertContainer.appendChild(alertDiv);
+            
+            // Auto dismiss after 5 seconds
+            setTimeout(() => {
+                const alert = bootstrap.Alert.getOrCreateInstance(alertDiv);
+                alert.close();
+            }, 5000);
+        }
+        
+        // Client-side validation
+        function validateForm(formData) {
+            const errors = {};
+            
+            const agentName = formData.get('agent_name')?.trim();
+            if (!agentName) {
+                errors.agent_name = 'Agent Name is required';
+            } else if (agentName.length < 2) {
+                errors.agent_name = 'Agent Name must be at least 2 characters';
+            }
+            
+            const companyName = formData.get('company_name')?.trim();
+            if (!companyName) {
+                errors.company_name = 'Company Name is required';
+            } else if (companyName.length < 2) {
+                errors.company_name = 'Company Name must be at least 2 characters';
+            }
+            
+            const mobile = formData.get('mobile_number')?.trim();
+            if (!mobile) {
+                errors.mobile_number = 'Mobile Number is required';
+            } else if (!/^[6-9]\d{9}$/.test(mobile)) {
+                errors.mobile_number = 'Enter a valid 10-digit mobile number';
+            }
+            
+            const email = formData.get('email')?.trim();
+            const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+            if (!email) {
+                errors.email = 'Email Address is required';
+            } else if (!emailRegex.test(email)) {
+                errors.email = 'Enter a valid email address';
+            }
+            
+            const rating = formData.get('service_rating');
+            if (!rating) {
+                errors.service_rating = 'Please select a service rating';
+            } else if (rating < 1 || rating > 5) {
+                errors.service_rating = 'Rating must be between 1 and 5';
+            }
+            
+            const feedback = formData.get('feedback')?.trim();
+            if (!feedback) {
+                errors.feedback = 'Your Feedback is required';
+            } else if (feedback.length < 10) {
+                errors.feedback = 'Feedback must be at least 10 characters';
+            }
+            
+            return errors;
+        }
+        
+        // Submit handler
+        form.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            clearValidation();
+            
+            const formData = new FormData(form);
+            const clientErrors = validateForm(formData);
+            
+            if (Object.keys(clientErrors).length > 0) {
+                showErrors(clientErrors);
+                showAlert('Please fix the errors in the form', 'warning');
+                return;
+            }
+            
+            // Disable submit button
+            const submitBtn = form.querySelector('button[type="submit"]');
+            const originalText = submitBtn.innerHTML;
+            submitBtn.disabled = true;
+            submitBtn.innerHTML = '<i class="bi bi-hourglass-split me-2"></i>Submitting...';
+            
+            try {
+                const response = await fetch('/submit', {
+                    method: 'POST',
+                    body: formData
+                });
+                
+                const result = await response.json();
+                
+                if (result.success) {
+                    showAlert(result.message, 'success');
+                    form.reset();
+                    // Clear any rating selection visually
+                    document.querySelectorAll('.btn-check').forEach(radio => radio.checked = false);
+                    
+                    // Redirect after 3 seconds
+                    setTimeout(() => {
+                        window.location.href = '/';
+                    }, 3000);
+                } else {
+                    if (result.errors) {
+                        showErrors(result.errors);
+                        showAlert('Please correct the errors and try again', 'danger');
+                    } else {
+                        showAlert(result.message || 'An error occurred', 'danger');
+                    }
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                showAlert('Network error. Please try again.', 'danger');
+            } finally {
+                submitBtn.disabled = false;
+                submitBtn.innerHTML = originalText;
+            }
+        });
+        
+        // Clear button functionality
+        document.getElementById('clearBtn').addEventListener('click', () => {
+            form.reset();
+            clearValidation();
+            document.querySelectorAll('.btn-check').forEach(radio => radio.checked = false);
+            showAlert('Form has been cleared', 'info');
+        });
+        
+        // Remove invalid class on input
+        document.querySelectorAll('.form-control').forEach(input => {
+            input.addEventListener('input', function() {
+                this.classList.remove('is-invalid');
+                const errorId = this.id + '_error';
+                const errorDiv = document.getElementById(errorId);
+                if (errorDiv) errorDiv.textContent = '';
+            });
+        });
+    </script>
+</body>
+</html>

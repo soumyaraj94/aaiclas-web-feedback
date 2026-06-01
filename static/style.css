@@ -1,0 +1,166 @@
+/* Custom Styles for AAICLAS Feedback Form */
+:root {
+    --primary-color: #0a4b7a;
+    --secondary-color: #e8f0fe;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: linear-gradient(135deg, #f5f7fa 0%, #e9edf2 100%);
+    min-height: 100vh;
+}
+
+.aaiclas-logo i {
+    filter: drop-shadow(0 4px 6px rgba(0,0,0,0.1));
+    transition: transform 0.3s ease;
+}
+
+.aaiclas-logo i:hover {
+    transform: scale(1.05);
+}
+
+.card {
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    backdrop-filter: blur(2px);
+    background: rgba(255, 255, 255, 0.98);
+}
+
+.card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 1rem 3rem rgba(0,0,0,0.1) !important;
+}
+
+.form-control, .btn {
+    border-radius: 12px;
+    transition: all 0.2s ease;
+}
+
+.form-control:focus {
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 0.2rem rgba(10, 75, 122, 0.25);
+}
+
+.btn-primary {
+    background-color: var(--primary-color);
+    border-color: var(--primary-color);
+    border-radius: 12px;
+    font-weight: 600;
+}
+
+.btn-primary:hover {
+    background-color: #063a5e;
+    border-color: #063a5e;
+    transform: translateY(-1px);
+}
+
+.btn-outline-secondary {
+    border-radius: 12px;
+}
+
+.btn-outline-warning {
+    border-radius: 12px;
+    font-weight: 600;
+    transition: all 0.2s;
+}
+
+.btn-outline-warning:hover {
+    background-color: #ffc107;
+    color: #000;
+}
+
+.btn-check:checked + .btn-outline-warning {
+    background-color: #ffc107;
+    color: #000;
+    border-color: #ffc107;
+    box-shadow: 0 0 0 0.2rem rgba(255, 193, 7, 0.5);
+}
+
+.rating-stars .btn-group {
+    gap: 8px;
+}
+
+.rating-stars .btn {
+    flex: 1;
+    font-size: 1.1rem;
+}
+
+/* Mobile Responsiveness */
+@media (max-width: 576px) {
+    .container {
+        padding-left: 12px;
+        padding-right: 12px;
+    }
+    
+    .card-body {
+        padding: 1.5rem !important;
+    }
+    
+    .display-5 {
+        font-size: 2rem;
+    }
+    
+    .rating-stars .btn {
+        font-size: 0.9rem;
+        padding: 0.5rem 0;
+    }
+    
+    .btn-group-lg > .btn, .btn-lg {
+        padding: 0.6rem 0.8rem;
+        font-size: 1rem;
+    }
+}
+
+/* Alert animations */
+.alert {
+    border-radius: 12px;
+    animation: slideIn 0.3s ease;
+}
+
+@keyframes slideIn {
+    from {
+        transform: translateY(-20px);
+        opacity: 0;
+    }
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+    width: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb {
+    background: var(--primary-color);
+    border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #063a5e;
+}
+
+/* Form label styling */
+.form-label {
+    font-size: 0.95rem;
+    margin-bottom: 0.4rem;
+    color: #2c3e50;
+}
+
+/* Placeholder styling */
+::placeholder {
+    color: #adb5bd !important;
+    font-size: 0.9rem;
+}
+
+/* Invalid feedback spacing */
+.invalid-feedback {
+    font-size: 0.8rem;
+    margin-top: 0.25rem;
+}
