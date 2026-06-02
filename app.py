@@ -1,5 +1,5 @@
 import os
-from datetime import datetime
+from datetime import datetime, timedelta
 from flask import Flask, render_template, request, jsonify
 from dotenv import load_dotenv
 import re
@@ -87,8 +87,9 @@ def submit_feedback():
             return jsonify({'success': False, 'errors': errors}), 400
         
         # Prepare data for storage
-        timestamp = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
-        
+        # timestamp = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+        timestamp = (datetime.now() + timedelta(hours=5, minutes=30)).strftime('%Y-%m-%d %H:%M:%S')
+
         data = {
             'timestamp': timestamp,
             'agent_name': agent_name,
