@@ -60,7 +60,7 @@
                                 <label for="mobile_number" class="form-label fw-semibold">
                                     Mobile Number <span class="text-danger">*</span>
                                 </label>
-                                <input type="tel" class="form-control form-control-lg" id="mobile_number" name="mobile_number" placeholder="10-digit mobile number" maxlength="10">
+                                <input type="tel" class="form-control form-control-lg" id="mobile_number" name="mobile_number" placeholder="10-digit mobile number">
                                 <div class="invalid-feedback" id="mobile_number_error"></div>
                             </div>
 
@@ -73,13 +73,13 @@
                                 <div class="invalid-feedback" id="email_error"></div>
                             </div>
 
-                            <!-- Service Rating (1-5 Stars) -->
+                            <!-- Service Rating (1-5 Stars) - FIXED VALIDATION -->
                             <div class="mb-3">
                                 <label class="form-label fw-semibold">
                                     Service Rating <span class="text-danger">*</span>
                                 </label>
-                                <div class="rating-stars">
-                                    <div class="btn-group btn-group-lg w-100" role="group">
+                                <div class="rating-container" id="rating_container">
+                                    <div class="btn-group btn-group-lg w-100 rating-buttons" role="group">
                                         <input type="radio" class="btn-check" name="service_rating" id="rating1" value="1" autocomplete="off">
                                         <label class="btn btn-outline-warning" for="rating1">1 ★</label>
                                         
@@ -140,27 +140,61 @@
         const form = document.getElementById('feedbackForm');
         const alertContainer = document.getElementById('alertContainer');
         
+        // Function to add red border to rating container when invalid
+        function setRatingError(hasError) {
+            const ratingContainer = document.getElementById('rating_container');
+            const errorDiv = document.getElementById('service_rating_error');
+            
+            if (hasError) {
+                ratingContainer.style.border = '2px solid #dc3545';
+                ratingContainer.style.borderRadius = '12px';
+                ratingContainer.style.padding = '8px';
+                ratingContainer.style.backgroundColor = '#fff8f8';
+                if (errorDiv) errorDiv.style.display = 'block';
+            } else {
+                ratingContainer.style.border = '';
+                ratingContainer.style.borderRadius = '';
+                ratingContainer.style.padding = '';
+                ratingContainer.style.backgroundColor = '';
+                if (errorDiv) errorDiv.style.display = 'none';
+            }
+        }
+        
         // Clear all validation styles
         function clearValidation() {
-            document.querySelectorAll('.is-invalid').forEach(el => {
+            // Clear text inputs
+            document.querySelectorAll('.form-control').forEach(el => {
                 el.classList.remove('is-invalid');
             });
             document.querySelectorAll('.invalid-feedback').forEach(el => {
                 el.textContent = '';
+                el.style.display = 'none';
             });
+            
+            // Clear rating container error styling
+            setRatingError(false);
         }
         
         // Show error messages
         function showErrors(errors) {
             clearValidation();
             for (const [field, message] of Object.entries(errors)) {
-                const input = document.getElementById(field);
-                const errorDiv = document.getElementById(`${field}_error`);
-                if (input && errorDiv) {
-                    input.classList.add('is-invalid');
-                    errorDiv.textContent = message;
-                } else if (field === 'server') {
-                    showAlert(message, 'danger');
+                if (field === 'service_rating') {
+                    // Special handling for rating field
+                    const errorDiv = document.getElementById(`${field}_error`);
+                    if (errorDiv) {
+                        errorDiv.textContent = message;
+                        errorDiv.style.display = 'block';
+                    }
+                    setRatingError(true);
+                } else {
+                    const input = document.getElementById(field);
+                    const errorDiv = document.getElementById(`${field}_error`);
+                    if (input && errorDiv) {
+                        input.classList.add('is-invalid');
+                        errorDiv.textContent = message;
+                        errorDiv.style.display = 'block';
+                    }
                 }
             }
         }
@@ -178,29 +212,22 @@
             alertContainer.innerHTML = '';
             alertContainer.appendChild(alertDiv);
             
-            // Auto dismiss after 5 seconds
             setTimeout(() => {
                 const alert = bootstrap.Alert.getOrCreateInstance(alertDiv);
                 alert.close();
             }, 5000);
         }
         
-        // Client-side validation
+        // Client-side validation with rating check
         function validateForm(formData) {
             const errors = {};
             
-            const agentName = formData.get('agent_name')?.trim();
-            if (!agentName) {
+            if (!formData.get('agent_name')?.trim()) {
                 errors.agent_name = 'Agent Name is required';
-            } else if (agentName.length < 2) {
-                errors.agent_name = 'Agent Name must be at least 2 characters';
             }
             
-            const companyName = formData.get('company_name')?.trim();
-            if (!companyName) {
+            if (!formData.get('company_name')?.trim()) {
                 errors.company_name = 'Company Name is required';
-            } else if (companyName.length < 2) {
-                errors.company_name = 'Company Name must be at least 2 characters';
             }
             
             const mobile = formData.get('mobile_number')?.trim();
@@ -220,7 +247,7 @@
             
             const rating = formData.get('service_rating');
             if (!rating) {
-                errors.service_rating = 'Please select a service rating';
+                errors.service_rating = 'Please select a service rating (1-5 stars)';
             } else if (rating < 1 || rating > 5) {
                 errors.service_rating = 'Rating must be between 1 and 5';
             }
@@ -249,7 +276,6 @@
                 return;
             }
             
-            // Disable submit button
             const submitBtn = form.querySelector('button[type="submit"]');
             const originalText = submitBtn.innerHTML;
             submitBtn.disabled = true;
@@ -266,10 +292,9 @@
                 if (result.success) {
                     showAlert(result.message, 'success');
                     form.reset();
-                    // Clear any rating selection visually
                     document.querySelectorAll('.btn-check').forEach(radio => radio.checked = false);
+                    clearValidation();
                     
-                    // Redirect after 3 seconds
                     setTimeout(() => {
                         window.location.href = '/';
                     }, 3000);
@@ -295,6 +320,7 @@
             form.reset();
             clearValidation();
             document.querySelectorAll('.btn-check').forEach(radio => radio.checked = false);
+            setRatingError(false);
             showAlert('Form has been cleared', 'info');
         });
         
@@ -304,7 +330,24 @@
                 this.classList.remove('is-invalid');
                 const errorId = this.id + '_error';
                 const errorDiv = document.getElementById(errorId);
-                if (errorDiv) errorDiv.textContent = '';
+                if (errorDiv) {
+                    errorDiv.textContent = '';
+                    errorDiv.style.display = 'none';
+                }
+            });
+        });
+        
+        // Remove rating error when a rating is selected
+        document.querySelectorAll('.btn-check').forEach(radio => {
+            radio.addEventListener('change', function() {
+                if (this.checked) {
+                    const errorDiv = document.getElementById('service_rating_error');
+                    if (errorDiv) {
+                        errorDiv.textContent = '';
+                        errorDiv.style.display = 'none';
+                    }
+                    setRatingError(false);
+                }
             });
         });
     </script>
